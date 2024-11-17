@@ -142,7 +142,7 @@ public class PPCategory {
             }
         }
 
-        return particleInfoList.getFirst();
+        return particleInfoList.get(0);
     }
 
     public ParticleAnimation getAnimation() {

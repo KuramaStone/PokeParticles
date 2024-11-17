@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.kuramastone"
-version = "1.0.0"
+version = "1.0.1"
 
 architectury {
     platformSetupLoomIde()
@@ -57,8 +57,8 @@ dependencies {
     mappings("net.fabricmc:yarn:1.20.1+build.10:v2")
     modImplementation("net.fabricmc:fabric-loader:0.16.9")
 
-    include("com.github.kuramastone:BUtilities:1.0.2")
-    implementation("com.github.kuramastone:BUtilities:1.0.2")
+    include("com.github.kuramastone:BUtilities-Core:1.1.0")
+    implementation("com.github.kuramastone:BUtilities-Core:1.1.0")
 
     modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
     modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
