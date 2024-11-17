@@ -4,6 +4,9 @@ This Fabric 1.20.1 mod allows you to define custom particle effects for Cobblemo
 
 ---
 
+## **Commands**
+- **/reloadPokeParticles**: Reloads the config immediately for easy customization
+
 ## **Creating a New Effect**
 
 1. **Define the Effect Name**
