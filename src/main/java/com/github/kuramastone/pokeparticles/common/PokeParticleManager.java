@@ -49,7 +49,6 @@ public class PokeParticleManager {
 
     public void loadParticleCategories() {
         YamlConfig config = new YamlConfig(modPlatform.getDataFolder(), null, null, "pokeparticles.yml", getClass());
-
         this.particleCategory = config.getKeys("").stream().map(config::getSection).map(PPCategory::new).toList();
     }
 

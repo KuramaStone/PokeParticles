@@ -1,7 +1,8 @@
 plugins {
     id("java")
-    id("dev.architectury.loom") version("1.6-SNAPSHOT")
-    id("architectury-plugin") version("3.4-SNAPSHOT")
+    id("dev.architectury.loom") version ("1.6-SNAPSHOT")
+    id("architectury-plugin") version ("3.4-SNAPSHOT")
+    id("com.github.johnrengelman.shadow") version ("8.1.0")
     kotlin("jvm") version ("1.8.10")
 }
 
@@ -29,13 +30,34 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots")
 }
 
+tasks.getByName<Test>("test") {
+    useJUnitPlatform()
+}
+
+tasks.processResources {
+    inputs.property("version", project.version)
+
+    filesMatching("fabric.mod.json") {
+        expand("version" to project.version)
+    }
+}
+
+
 val fabricApiVersion: String by project
+
+configurations {
+    create("shade") {
+        isCanBeResolved = true
+        isCanBeConsumed = false
+    }
+}
 
 dependencies {
     minecraft("net.minecraft:minecraft:1.20.1")
     mappings("net.fabricmc:yarn:1.20.1+build.10:v2")
     modImplementation("net.fabricmc:fabric-loader:0.16.9")
 
+    include("com.github.kuramastone:BUtilities:1.0.2")
     implementation("com.github.kuramastone:BUtilities:1.0.2")
 
     modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
@@ -54,15 +76,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
-
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
-tasks.processResources {
-    inputs.property("version", project.version)
-
-    filesMatching("fabric.mod.json") {
-        expand("version" to project.version)
-    }
+tasks.shadowJar {
+    archiveClassifier.set("shaded")
+    configurations = listOf(project.configurations.getByName("shadow"))
+    relocate("com.github.kuramastone.bUtilities", "com.github.kuramastone.pokeparticles.shade.bUtilities")
 }

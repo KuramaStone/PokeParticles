@@ -8,11 +8,15 @@ import com.cobblemon.mod.common.api.events.pokemon.PokemonRecalledEvent;
 import com.cobblemon.mod.common.api.events.pokemon.PokemonSentPostEvent;
 import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.particle.SnowstormParticleEffect;
 import com.github.kuramastone.pokeparticles.common.PokeParticleManager;
 import kotlin.Unit;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.text.Text;
 
 public class PokeParticlesMod implements ModInitializer {
     public static String MODID = "pokeparticles";
@@ -24,12 +28,30 @@ public class PokeParticlesMod implements ModInitializer {
     public void onInitialize() {
         manager = new PokeParticleManager(new FabricModImpl());
 
+        registerCommand();
+
         CobblemonEvents.POKEMON_ENTITY_LOAD.subscribe(Priority.NORMAL, this::handlePokemonLoad);
         CobblemonEvents.POKEMON_SENT_POST.subscribe(Priority.NORMAL, this::handlePokemonSentOut);
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.NORMAL, this::handlePokemonSpawn);
         CobblemonEvents.POKEMON_RECALLED.subscribe(Priority.NORMAL, this::handlePokemonRecall);
 
         ServerTickEvents.START_SERVER_TICK.register(this::onServerTick);
+    }
+
+    private void registerCommand() {
+
+        // Register the "reload" command
+        CommandRegistrationCallback.EVENT.register((dispatcher, cmdRegistry, regEnv) -> {
+            dispatcher.register(
+                    CommandManager.literal("reloadpokeparticles")
+                            .requires(src -> src.hasPermissionLevel(2))
+                            .executes(context -> {
+                                manager.loadParticleCategories();
+                                context.getSource().sendMessage(Text.literal("Reload complete!"));
+                                return 1;
+                            })
+            );
+        });
     }
 
     private void onServerTick(MinecraftServer minecraftServer) {

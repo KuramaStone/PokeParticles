@@ -3,13 +3,10 @@ package com.github.kuramastone.pokeparticles.common;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.github.kuramastone.bUtilities.yaml.YamlConfig;
-import com.github.kuramastone.bUtilities.yaml.YamlParser;
 import com.github.kuramastone.pokeparticles.common.particles.ParticleAnimation;
 import com.github.kuramastone.pokeparticles.common.particles.ParticleInfo;
-import net.minecraft.server.dedicated.command.SetIdleTimeoutCommand;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.SplittableRandom;
 
