@@ -1,0 +1,95 @@
+fire aura:
+  animation: AURA
+  size modifier: 1.25
+  priority:
+    # If true, this effect will always appear
+    ignores priority: false
+    # The priority group this applies to.
+    priority group: normal
+    # Priority allows you to choose which effects should take precedence within the group
+    priority: 100
+
+
+  #These are the criteria needed to apply this
+  conditions:
+    # OPTIONAL: The target pokemon. Replace with "any" to allow all.
+    # target pokemon: any
+    target pokemon:
+      - charmander
+      - charmeleon
+      - charizard
+    # OPTIONAL: If true, this will only apply to shiny pokemon.
+    shiny only: false
+    # OPTIONAL: The form to apply this to.
+    target form: any
+    # OPTIONAL: minimum level required
+    minimum level: 50
+
+  # This specifies the particles that will spawn and their percentage. This example has 90% flame particles and 10% red dust.
+  particles to spawn:
+    "minecraft:dust":
+      percentage: 100
+      # Larger pokemon produce proportionally more particles. This is the particle count per cubic block
+      scaled amount: 0.5
+      # Minecraft dust has the option for extra data. In this case, it is R/G/B for color.
+      data: 255/0/255
+
+powerful bands:
+  animation: DUAL_DISK
+  size modifier: 1.0
+  priority:
+    # If true, this effect will always appear
+    ignores priority: false
+    # The priority group this applies to.
+    priority group: special
+    # Priority allows you to choose which effects should take precedence within the group
+    priority: 100
+
+  #These are the criteria needed to apply this
+  conditions:
+    # OPTIONAL: The target pokemon. Replace with "any" to allow all
+    target pokemon: any
+    # OPTIONAL: If true, this will only apply to shiny pokemon.
+    shiny only: false
+    # OPTIONAL: The form to apply this to.
+    target form: any
+    # OPTIONAL: minimum level required
+    minimum level: 100
+
+  # This specifies the particles that will spawn and their percentage. This example has 90% flame particles and 10% red dust.
+  particles to spawn:
+    "minecraft:flame":
+      # This is the percentage of particles that will appear as this.
+      percentage: 100
+      # Larger pokemon produce proportionally more particles. This is the particle count per cubic block
+      scaled amount: 0.25
+
+shiny aura:
+  animation: ORBIT
+  size modifier: 1.0
+  priority:
+    # If true, this effect will always appear
+    ignores priority: false
+    # The priority group this applies to.
+    priority group: special
+    # Priority allows you to choose which effects should take precedence within the group
+    priority: 200
+
+  #These are the criteria needed to apply this
+  conditions:
+    # OPTIONAL: The target pokemon. Replace with "any" to allow all
+    target pokemon: any
+    # OPTIONAL: If true, this will only apply to shiny pokemon.
+    shiny only: true
+    # OPTIONAL: The form to apply this to.
+    target form: any
+    # OPTIONAL: minimum level required
+    minimum level: 0
+
+  # This specifies the particles that will spawn and their percentage. This example has 90% flame particles and 10% red dust.
+  particles to spawn:
+    "minecraft:end_rod":
+      # This is the percentage of particles that will appear as this.
+      percentage: 90
+      # Larger pokemon produce proportionally more particles. This is the particle count per cubic block
+      scaled amount: 0.25
