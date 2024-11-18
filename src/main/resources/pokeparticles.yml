@@ -68,7 +68,7 @@ shadow aura:
       # Larger pokemon produce proportionally more particles. This is the particle count per cubic block
       scaled amount: 0.5
       # Minecraft dust has the option for extra data. In this case, it is R/G/B for color.
-      data: 255/0/255-0/0/0
+      data: 255/0/255->0/0/0
     "/minecraft:dust_color_transition":
       percentage: 100
       # Larger pokemon produce proportionally more particles. This is the particle count per cubic block

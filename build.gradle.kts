@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.kuramastone"
-version = "1.0.2"
+version = "1.0.3"
 
 architectury {
     platformSetupLoomIde()
@@ -44,21 +44,15 @@ tasks.processResources {
 
 
 val fabricApiVersion: String by project
-
-configurations {
-    create("shade") {
-        isCanBeResolved = true
-        isCanBeConsumed = false
-    }
-}
+val bUtilitiesVersion: String by project
 
 dependencies {
     minecraft("net.minecraft:minecraft:1.20.1")
     mappings("net.fabricmc:yarn:1.20.1+build.10:v2")
     modImplementation("net.fabricmc:fabric-loader:0.16.9")
 
-    include("com.github.kuramastone:BUtilities-Core:1.1.0")
-    implementation("com.github.kuramastone:BUtilities-Core:1.1.0")
+    include("com.github.kuramastone:BUtilities-Core:$bUtilitiesVersion")
+    implementation("com.github.kuramastone:BUtilities-Core:$bUtilitiesVersion")
 
     modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
     modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
@@ -75,9 +69,4 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
-}
-tasks.shadowJar {
-    archiveClassifier.set("shaded")
-    configurations = listOf(project.configurations.getByName("shadow"))
-    relocate("com.github.kuramastone.bUtilities", "com.github.kuramastone.pokeparticles.shade.bUtilities")
 }
