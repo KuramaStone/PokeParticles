@@ -20,8 +20,12 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class PokeParticleManager {
+
+    public static final Logger logger = Logger.getLogger("PokeParticles");
+
 
     private List<PokemonEntity> pokemonToApplyEffect;
     private List<PPCategory> particleCategory;

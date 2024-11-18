@@ -34,6 +34,49 @@ fire aura:
       # Minecraft dust has the option for extra data. In this case, it is R/G/B for color.
       data: 255/0/255
 
+shadow aura:
+  animation: AURA
+  size modifier: 1.25
+  priority:
+    # If true, this effect will always appear
+    ignores priority: false
+    # The priority group this applies to.
+    priority group: shadow
+    # Priority allows you to choose which effects should take precedence within the group
+    priority: 100
+
+
+  #These are the criteria needed to apply this
+  conditions:
+    # OPTIONAL: The target pokemon. Replace with "any" to allow all.
+    # target pokemon: any
+    target pokemon: any
+    # OPTIONAL: If true, this will only apply to shiny pokemon.
+    shiny only: false
+    # OPTIONAL: The form to apply this to.
+    target form: any
+    # OPTIONAL: minimum level required
+    minimum level: 0
+    # OPTIONAL: Target aspect to apply to.
+    target aspects:
+      - shadow
+
+  # This specifies the particles that will spawn and their percentage. This example has 90% flame particles and 10% red dust.
+  particles to spawn:
+    "minecraft:dust_color_transition":
+      percentage: 100
+      # Larger pokemon produce proportionally more particles. This is the particle count per cubic block
+      scaled amount: 0.5
+      # Minecraft dust has the option for extra data. In this case, it is R/G/B for color.
+      data: 255/0/255-0/0/0
+    "/minecraft:dust_color_transition":
+      percentage: 100
+      # Larger pokemon produce proportionally more particles. This is the particle count per cubic block
+      scaled amount: 0.5
+      # Minecraft dust has the option for extra data. In this case, it is R/G/B for color.
+      data: 0/0/0->255/0/255
+
+
 powerful bands:
   animation: DUAL_DISK
   size modifier: 1.0

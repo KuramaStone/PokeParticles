@@ -3,10 +3,12 @@ package com.github.kuramastone.pokeparticles.fabric;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.github.kuramastone.pokeparticles.common.PPModPlatform;
 import com.github.kuramastone.pokeparticles.common.particles.ParticleInfo;
+import com.github.kuramastone.pokeparticles.common.utils.StringUtils;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.ParticleEffectArgumentType;
+import net.minecraft.particle.DustColorTransitionParticleEffect;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.registry.Registries;
@@ -14,6 +16,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import java.io.File;
@@ -23,12 +26,17 @@ import java.util.UUID;
 
 public class FabricModImpl extends PPModPlatform {
 
-    public Object getRedstoneDustData(String data) {
-        String[] val = data.split("/");
-        float x = Float.parseFloat(val[0]) / 255.0f;
-        float y = Float.parseFloat(val[1]) / 255.0f;
-        float z = Float.parseFloat(val[2]) / 255.0f;
-        return new DustParticleEffect(new Vector3f(x, y, z), 1.0f);
+    public DustParticleEffect getRedstoneDustData(String data) {
+        Vector3f color = StringUtils.splitIntoVec3(data);
+        return new DustParticleEffect(color, 1.0f);
+    }
+
+    public DustColorTransitionParticleEffect getRedstoneDustTransitionData(String data) {
+        String[] valueSplit = data.split("->");
+        Vector3f color1 = StringUtils.splitIntoVec3(valueSplit[0]);
+
+        Vector3f color2 = StringUtils.splitIntoVec3(valueSplit[1]);
+        return new DustColorTransitionParticleEffect(color1, color2, 1.0f);
     }
 
     @Override
@@ -68,6 +76,11 @@ public class FabricModImpl extends PPModPlatform {
         if (particleNamespace.equalsIgnoreCase("minecraft:dust")) {
             String data = info.getData() == null ? "255/255/255" : info.getData();
             particleEffect = (DustParticleEffect) getRedstoneDustData(data);
+        }
+        // load transitioning color
+        else if(particleNamespace.equalsIgnoreCase("minecraft:dust_color_transition")) {
+            String data = info.getData() == null ? "0/0/0->255/255/255" : info.getData();
+            particleEffect = getRedstoneDustTransitionData(data);
         }
         // load as normal particle
         else {

@@ -7,7 +7,9 @@ import com.github.kuramastone.pokeparticles.common.particles.ParticleAnimation;
 import com.github.kuramastone.pokeparticles.common.particles.ParticleInfo;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.SplittableRandom;
 
 public class PPCategory {
@@ -40,11 +42,14 @@ public class PPCategory {
 
         boolean mustBeShiny = section.get("conditions.shiny only", false);
         String targetForm = section.get("conditions.target form", "any");
+        List<String> targetAspects = loadTargetAspects(section);
 
         pokemonProperties = new PokemonProperties();
         pokemonProperties.setShiny(mustBeShiny ? Boolean.TRUE : null);
         if(!targetForm.equalsIgnoreCase("any"))
             pokemonProperties.setForm(targetForm);
+        if(targetAspects != null)
+            pokemonProperties.setAspects(new HashSet<>(targetAspects));
 
         animation = ParticleAnimation.valueOf(section.get("animation", "AURA").toString());
     }
@@ -55,6 +60,7 @@ public class PPCategory {
                 .stream()
                 .map(section::getSection)
                 .map(ParticleInfo::new)
+                .filter(ParticleInfo::validate)
                 .toList();
     }
 
@@ -66,13 +72,21 @@ public class PPCategory {
     private List<String> loadTargetPokemonNames(YamlConfig section) {
         String key = "conditions.target pokemon";
         if(section.containsKey(key)) {
-            Object obj = section.getObject(key);
-            if(obj instanceof List) {
-                return section.getStringList(key).stream().map(String::toLowerCase).toList();
-            }
-            else {
-                return List.of(obj.toString());
-            }
+            return section.getStringListOrString(key);
+        }
+
+        return null;
+    }
+
+    /**
+     * Reads the pokemon name from a config section. Allows adapting of strings into String Lists
+     * @param section
+     * @return
+     */
+    private List<String> loadTargetAspects(YamlConfig section) {
+        String key = "conditions.target aspects";
+        if(section.containsKey(key)) {
+            return section.getStringListOrString(key);
         }
 
         return null;
