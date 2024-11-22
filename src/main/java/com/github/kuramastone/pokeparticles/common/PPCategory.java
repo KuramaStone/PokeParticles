@@ -14,6 +14,7 @@ import java.util.SplittableRandom;
 
 public class PPCategory {
 
+    private final List<String> targetAspects;
     private List<ParticleInfo> particleInfoList;
 
     // if true, this category only applies to shinies
@@ -42,14 +43,12 @@ public class PPCategory {
 
         boolean mustBeShiny = section.get("conditions.shiny only", false);
         String targetForm = section.get("conditions.target form", "any");
-        List<String> targetAspects = loadTargetAspects(section);
+        this.targetAspects = loadTargetAspects(section);
 
         pokemonProperties = new PokemonProperties();
         pokemonProperties.setShiny(mustBeShiny ? Boolean.TRUE : null);
         if(!targetForm.equalsIgnoreCase("any"))
             pokemonProperties.setForm(targetForm);
-        if(targetAspects != null)
-            pokemonProperties.setAspects(new HashSet<>(targetAspects));
 
         animation = ParticleAnimation.valueOf(section.get("animation", "AURA").toString());
     }
@@ -99,8 +98,23 @@ public class PPCategory {
         boolean propertiesCheck = pokemonProperties.matches(pe);
         boolean nameCheck = checkName(pe.getPokemon().getSpecies().getName());
         boolean levelCheck = checkLevel(pe.getPokemon().getLevel());
+        boolean aspectCheck = checkAspects(pe);
 
-        return propertiesCheck && nameCheck && levelCheck;
+        return propertiesCheck && nameCheck && levelCheck && aspectCheck;
+    }
+
+    private boolean checkAspects(PokemonEntity pe) {
+        if(targetAspects == null) {
+            return true;
+        }
+        Set<String> remaining = new HashSet<>(targetAspects);
+        Set<String> peAspects = pe.getPokemon().getAspects();
+
+        for (String peAspect : peAspects) {
+            remaining.remove(peAspect);
+        }
+
+        return remaining.isEmpty();
     }
 
     private boolean checkLevel(int level) {
