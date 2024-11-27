@@ -1,6 +1,6 @@
 # PokeParticles
 
-This Fabric 1.20.1 mod allows you to define custom particle effects for Cobblemon, which are triggered based on certain conditions.
+This Fabric 1.21.1 mod allows you to define custom particle effects for Cobblemon, which are triggered based on certain conditions.
 
 ---
 
