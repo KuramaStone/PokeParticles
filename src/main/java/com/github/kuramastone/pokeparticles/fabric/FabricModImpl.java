@@ -12,6 +12,10 @@ import net.minecraft.particle.DustColorTransitionParticleEffect;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.ParticleCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
@@ -86,7 +90,7 @@ public class FabricModImpl extends PPModPlatform {
         else {
             try {
                 particleEffect = ParticleEffectArgumentType.readParameters(
-                        new StringReader(particleNamespace), Registries.PARTICLE_TYPE.getReadOnlyWrapper());
+                        new StringReader(particleNamespace), PokeParticlesMod.getServer().getRegistryManager());
             }
             catch (CommandSyntaxException e) {
                 throw new RuntimeException(e);

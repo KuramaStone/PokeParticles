@@ -6,20 +6,21 @@ import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent;
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent;
 import com.cobblemon.mod.common.api.events.pokemon.PokemonRecalledEvent;
 import com.cobblemon.mod.common.api.events.pokemon.PokemonSentPostEvent;
-import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import com.cobblemon.mod.common.particle.SnowstormParticleEffect;
 import com.github.kuramastone.pokeparticles.common.PokeParticleManager;
 import kotlin.Unit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 
 public class PokeParticlesMod implements ModInitializer {
+
     public static String MODID = "pokeparticles";
+    private static MinecraftServer minecraftServer;
 
     private PokeParticleManager manager;
 
@@ -35,7 +36,12 @@ public class PokeParticlesMod implements ModInitializer {
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.NORMAL, this::handlePokemonSpawn);
         CobblemonEvents.POKEMON_RECALLED.subscribe(Priority.NORMAL, this::handlePokemonRecall);
 
+        ServerLifecycleEvents.SERVER_STARTING.register(this::onServerStart);
         ServerTickEvents.START_SERVER_TICK.register(this::onServerTick);
+    }
+
+    private void onServerStart(MinecraftServer minecraftServer) {
+        PokeParticlesMod.minecraftServer = minecraftServer;
     }
 
     private void registerCommand() {
@@ -77,5 +83,9 @@ public class PokeParticlesMod implements ModInitializer {
     private Unit handlePokemonLoad(PokemonEntityLoadEvent event) {
         manager.addPokemon(event.getPokemonEntity());
         return null;
+    }
+
+    public static MinecraftServer getServer() {
+        return minecraftServer;
     }
 }

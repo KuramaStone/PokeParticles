@@ -1,13 +1,13 @@
 plugins {
     id("java")
-    id("dev.architectury.loom") version ("1.6-SNAPSHOT")
+    id("dev.architectury.loom") version("1.7-SNAPSHOT")
     id("architectury-plugin") version ("3.4-SNAPSHOT")
     id("com.github.johnrengelman.shadow") version ("8.1.0")
     kotlin("jvm") version ("1.8.10")
 }
 
 group = "com.github.kuramastone"
-version = "1.0.4"
+version = "1.1.0"
 
 architectury {
     platformSetupLoomIde()
@@ -47,16 +47,17 @@ val fabricApiVersion: String by project
 val bUtilitiesVersion: String by project
 
 dependencies {
-    minecraft("net.minecraft:minecraft:1.20.1")
-    mappings("net.fabricmc:yarn:1.20.1+build.10:v2")
+    minecraft("net.minecraft:minecraft:1.21.1")
+    mappings("net.fabricmc:yarn:1.21.1+build.1:v2")
     modImplementation("net.fabricmc:fabric-loader:0.16.9")
+    //modImplementation("com.cobblemon:fabric:1.6.0+1.21.1-SNAPSHOT")
+    modImplementation(files("libs/Cobblemon-fabric-1.6.0b8390+1.21.1-HEAD-c75c5e4.jar"))
 
     include("com.github.kuramastone:BUtilities-Core:$bUtilitiesVersion")
     implementation("com.github.kuramastone:BUtilities-Core:$bUtilitiesVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.0")
 
     modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
-    modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
-    modImplementation("com.cobblemon:fabric:1.5.2+1.20.1")
     setOf(
         "fabric-api-base",
         "fabric-command-api-v1",
@@ -64,7 +65,7 @@ dependencies {
         "fabric-networking-api-v1"
     ).forEach {
         // Add each module as a dependency
-        modImplementation(fabricApi.module(it, "$fabricApiVersion"))
+        modImplementation(fabricApi.module(it, fabricApiVersion))
     }
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
