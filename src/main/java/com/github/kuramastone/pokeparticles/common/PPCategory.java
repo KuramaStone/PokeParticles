@@ -7,10 +7,7 @@ import com.github.kuramastone.pokeparticles.common.particles.ParticleAnimation;
 import com.github.kuramastone.pokeparticles.common.particles.ParticleInfo;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.SplittableRandom;
+import java.util.*;
 
 public class PPCategory {
 
@@ -47,30 +44,37 @@ public class PPCategory {
 
         pokemonProperties = new PokemonProperties();
         pokemonProperties.setShiny(mustBeShiny ? Boolean.TRUE : null);
-        if(!targetForm.equalsIgnoreCase("any"))
+        if (!targetForm.equalsIgnoreCase("any"))
             pokemonProperties.setForm(targetForm);
 
         animation = ParticleAnimation.valueOf(section.get("animation", "AURA").toString());
     }
 
     private List<ParticleInfo> loadParticleList(YamlConfig section) {
-        section = section.getSection("particles to spawn");
-        return section.getKeys("")
-                .stream()
-                .map(section::getSection)
-                .map(ParticleInfo::new)
-                .filter(ParticleInfo::validate)
-                .toList();
+        YamlConfig particleSection = section.getSection("particles to spawn");
+        if (particleSection == null) {
+            throw new IllegalArgumentException("%s lacks a 'particles to spawn' section in the config!".formatted(section.getParentKeyName()));
+        }
+        List<ParticleInfo> list = new ArrayList<>();
+        for (String key : particleSection.getKeys("")) {
+            YamlConfig infoSection = particleSection.getSection(key);
+            ParticleInfo pi = new ParticleInfo(infoSection);
+            if (pi.validate())
+                list.add(pi);
+        }
+
+        return list;
     }
 
     /**
      * Reads the pokemon name from a config section. Allows adapting of strings into String Lists
+     *
      * @param section
      * @return
      */
     private List<String> loadTargetPokemonNames(YamlConfig section) {
         String key = "conditions.target pokemon";
-        if(section.containsKey(key)) {
+        if (section.containsKey(key)) {
             return section.getStringListOrString(key);
         }
 
@@ -79,12 +83,13 @@ public class PPCategory {
 
     /**
      * Reads the pokemon name from a config section. Allows adapting of strings into String Lists
+     *
      * @param section
      * @return
      */
     private List<String> loadTargetAspects(YamlConfig section) {
         String key = "conditions.target aspects";
-        if(section.containsKey(key)) {
+        if (section.containsKey(key) && section.getObject(key) != null) {
             return section.getStringListOrString(key);
         }
 
@@ -104,7 +109,7 @@ public class PPCategory {
     }
 
     private boolean checkAspects(PokemonEntity pe) {
-        if(targetAspects == null) {
+        if (targetAspects == null) {
             return true;
         }
         Set<String> remaining = new HashSet<>(targetAspects);
@@ -123,16 +128,17 @@ public class PPCategory {
 
     /**
      * Check if this name appears on the list OR if the check is unnecessary.
+     *
      * @param name
      * @return
      */
     private boolean checkName(String name) {
         // if list is null, default to true
-        if(targetPokemonNames == null) {
+        if (targetPokemonNames == null) {
             return true;
         }
         // if list accepts any, return true
-        if(targetPokemonNames.contains("any")) {
+        if (targetPokemonNames.contains("any")) {
             return true;
         }
 
@@ -165,7 +171,7 @@ public class PPCategory {
         double rnd = random.nextDouble() * sum;
 
         for (ParticleInfo pi : this.particleInfoList) {
-            if(rnd <= pi.getPercentage()) {
+            if (rnd <= pi.getPercentage()) {
                 return pi;
             }
         }

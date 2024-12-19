@@ -52,8 +52,19 @@ public class PokeParticleManager {
     }
 
     public void loadParticleCategories() {
-        YamlConfig config = new YamlConfig(modPlatform.getDataFolder(), null, null, "pokeparticles.yml", getClass());
-        this.particleCategory = config.getKeys("").stream().map(config::getSection).map(PPCategory::new).toList();
+        try {
+            YamlConfig config = new YamlConfig(modPlatform.getDataFolder(), null, null, "pokeparticles.yml", getClass());
+
+            List<PPCategory> list = new ArrayList<>();
+            for(String key : config.getKeys("")) {
+                YamlConfig section = config.getSection(key);
+                list.add(new PPCategory(section));
+            }
+            this.particleCategory = list;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onServerTick() {
@@ -150,5 +161,9 @@ public class PokeParticleManager {
      */
     public void removePokemon(PokemonEntity entity) {
         pokemonToApplyEffect.remove(entity);
+    }
+
+    public List<PokemonEntity> getPokemonToApplyEffect() {
+        return pokemonToApplyEffect;
     }
 }
