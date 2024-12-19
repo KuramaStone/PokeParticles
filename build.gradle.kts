@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.kuramastone"
-version = "1.1.1"
+version = "1.1.1-1.20.1"
 
 architectury {
     platformSetupLoomIde()
@@ -47,11 +47,11 @@ val fabricApiVersion: String by project
 val bUtilitiesVersion: String by project
 
 dependencies {
-    minecraft("net.minecraft:minecraft:1.21.1")
-    mappings("net.fabricmc:yarn:1.21.1+build.1:v2")
+    minecraft("net.minecraft:minecraft:1.20.1")
+    mappings("net.fabricmc:yarn:1.20.1+build.10:v2")
     modImplementation("net.fabricmc:fabric-loader:0.16.9")
-    //modImplementation("com.cobblemon:fabric:1.6.0+1.21.1-SNAPSHOT")
-    modImplementation(files("libs/Cobblemon-fabric-1.6.0b8390+1.21.1-HEAD-c75c5e4.jar"))
+    modImplementation("com.cobblemon:fabric:1.5.2+1.20.1")
+    //modImplementation(files("libs/Cobblemon-fabric-1.6.0b8390+1.21.1-HEAD-c75c5e4.jar"))
 
     include("com.github.kuramastone:BUtilities-Core:$bUtilitiesVersion")
     implementation("com.github.kuramastone:BUtilities-Core:$bUtilitiesVersion")

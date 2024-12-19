@@ -90,7 +90,7 @@ public class FabricModImpl extends PPModPlatform {
         else {
             try {
                 particleEffect = ParticleEffectArgumentType.readParameters(
-                        new StringReader(particleNamespace), PokeParticlesMod.getServer().getRegistryManager());
+                        new StringReader(particleNamespace), Registries.PARTICLE_TYPE.getReadOnlyWrapper());
             }
             catch (CommandSyntaxException e) {
                 throw new RuntimeException(e);
